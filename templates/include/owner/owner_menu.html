@@ -1,0 +1,13 @@
+<style>
+    .menu{
+        display: flex;
+        width: 100%;
+        overflow: scroll;
+        gap: 10px;
+    }
+</style>
+<div class="menu">
+    <a  href="/owner/owner_home/" class="my-1 {% if request.path == '/owner/owner_home/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Home</a>
+      <a  href="/owner/add_employee/" class="my-1 {% if request.path == '/owner/add_employee/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Add Employee</a>
+    <a href="/logout/" class="btn btn-danger my-1">Logout</a>
+</div>

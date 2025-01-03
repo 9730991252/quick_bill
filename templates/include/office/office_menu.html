@@ -1,0 +1,17 @@
+<style>
+    .menu{
+        display: flex;
+        width: 100%;
+        overflow: scroll;
+        gap: 10px;
+    }
+</style>
+<div class="menu">
+    <a  href="/office/office_home/" class="my-1 {% if request.path == '/office/office_home/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Home</a>
+    <a  href="/office/completed_bill/" class="my-1 {% if request.path == '/office/completed_bill/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">completed Bill</a>
+    <a  href="/office/report/" class="my-1 {% if request.path == '/office/report/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Report</a>
+    <a  href="/office/category/" class="my-1 {% if request.path == '/office/category/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Category</a>
+    <a  href="/office/item/" class="my-1 {% if request.path == '/office/item/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">Item</a>
+    <a  href="/office/profile/" class="my-1 {% if request.path == '/office/profile/' %}btn btn-warning{% else %}btn btn-primary{% endif %}">प्रोफाइल</a>
+    <a href="/logout/" class="btn btn-danger my-1">Logout</a>
+</div>

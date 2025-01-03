@@ -1,0 +1,13 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% include 'include/alert.html' %}
+<div>
+    welcome - {{shope.owner_name}}
+</div>
+
+{% include 'include/owner/owner_menu.html' %}
+
+
+{% endblock content %}

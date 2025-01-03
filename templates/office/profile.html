@@ -1,0 +1,77 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% include 'include/alert.html' %}
+<div>
+    welcome - {{e.name}}
+</div>
+
+{% include 'include/office/office_menu.html' %}<style>
+    form{
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        padding: 10px;
+        width: 400px;
+        height: fit-content;
+        margin: auto;
+    }
+</style>
+<form method="POST">{% csrf_token %}
+    <div>
+        <label for="name" class="mt-2">Shope Name</label>
+        <input type="text" id="name" name="shope_name" value="{{e.shope.shope_name}}" class="my-2 form-control" required>
+    </div>
+    <div>
+        <label for="name" class="mt-2">Address</label>
+        <input type="text" id="name" name="address" value="{{e.shope.address}}" class="my-2 form-control" required>
+    </div>
+    <div>
+        <label for="name" class="mt-2">Contact Details</label>
+        <input type="text" id="name" name="contact_details" value="{{e.shope.contact_details}}" class="my-2 form-control" required>
+    </div>
+    <div class="text-center"><b>Self</b></div>
+    <div>
+        <label for="name" class="mt-2">Name</label>
+        <input type="text" id="name" name="name" value="{{e.name}}" class="my-2 form-control" required>
+    </div>
+    <div>
+        <label for="mobile" class="mt-2">Mobile</label>
+        <input type="text" id="mobile" name="mobile" value="{{e.mobile}}" class="my-2 form-control" required>
+    </div>
+    <div>
+        <label for="pin" class="mt-2">Pin</label>
+        <input type="text" id="pin" name="pin" value="{{e.pin}}" class="my-2 form-control" required>
+    </div>
+
+    <div>
+        <button class="btn btn-primary form-control my-3" name="edit_profile">Save Changes</button>
+    </div>
+</form>
+<script>
+    function check_mobile(){
+        mobile = document.getElementById('Mobile').value;
+        if (mobile.length <= 9 ){
+          document.getElementById('number').style.borderColor ='green';return false;
+        }
+          if (mobile.length >= 11 ){
+          alert('only 10 digit number ')
+        }
+          if (mobile.length == 10 ){
+              document.getElementById('number').style.borderColor ='';return true;
+
+        }
+    }
+    function check_pin(){
+        pin=document.getElementById('pin').value;
+        if (pin.length <= 3 ){
+          document.getElementById('pin').style.borderColor ='green';return false;
+        }
+          if (pin.length >= 5 ){
+          alert('only 4 digit number Secret Pin')
+        }
+          if (pin.length == 4 ){
+              document.getElementById('pin').style.borderColor ='';return true;
+        }
+    }
+</script>
+{% endblock content %}

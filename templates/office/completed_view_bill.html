@@ -1,0 +1,99 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% load home_tag %}
+<div class="hide">
+<div>welcome - {{e.name}} &nbsp; <b>Todayes Total  Rs.{% todayes_tea_total %}
+</b></div>
+
+{% include 'include/office/office_menu.html' %}
+
+</div>
+<style>
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    .bill_containt_box{
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        border-top: 1px solid rgb(201, 201, 201);
+        .header{
+            font-weight: 700;
+            border-bottom: 1px solid rgb(211, 211, 211);
+            padding: 2px;
+        }
+        .containt{
+            padding: 2px;
+            border-bottom: 1px solid rgb(233, 233, 233);
+        }
+    }
+    .addvertise{
+    display: none;
+  }
+  .bill_number_box{
+    display: grid;
+    grid-template-columns: 0.7fr 2fr;
+  }
+</style>
+<style media="print">
+  @page{
+    size: 3in 10in;
+    margin: 0in;
+    padding: 0in;
+    } 
+    .hide{
+        display: none;
+    }
+    .addvertise{
+        display: unset;
+        text-align: center;
+        font-weight: 500;
+        font-size: 13px;
+    }
+    #thank_you{
+        font-weight: 500;
+        font-size: 13px;
+        text-align: center;
+        margin-bottom: -0.05in;
+    }
+</style>
+
+<div class="container border bill_box">
+    <div>
+        <div class="text-center">
+            <h3>{{shope.shope_name}}</h3>
+            <h6>{{shope.address}}</h6>
+            <h6>{{shope.contact_details}}</h6>
+        </div>
+        <div class="bill_number_box">
+            <div ><h6>Bill {{order_master.order_filter}}</h6></div>
+            <div><h6>{{order_master.ordered_date}}</h6></div>
+        </div>
+    </div>
+    <div class="bill_containt_box">
+        <div class="header">Item</div>
+        <div class="header">Qty</div>
+        <div class="header">Price</div>
+        <div class="header">Amount</div>
+        {% for o in order_detail %}
+            <div class="containt">{{o.item.name}}</div>
+            <div class="containt">{{o.qty}}</div>
+            <div class="containt">{{o.price}}</div>
+            <div class="containt">{{o.total_price}}</div>
+        {% endfor %}
+    </div>
+    <h6><b>Total Amount Rs.{{total_amount}}</b></h6>
+    <div class="text-center"><h6><b>Thank You Visit Again</b></h6></div>
+    <div class="addvertise">All type Mobile Software  9730 99 1252</div>
+</div>
+
+
+<br>
+<div class="hide container text-center">
+    <button class="btn btn-primary" onclick="print()">Print</button>
+</div>
+
+{% endblock content %}

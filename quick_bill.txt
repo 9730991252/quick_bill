@@ -1,0 +1,185 @@
+103.150.136.82
+  
+_______________________________________
+
+cd quick_bill
+git pull
+source venv/bin/activate
+python3 manage.py makemigrations
+python3 manage.py migrate
+systemctl daemon-reload
+systemctl restart quick_bill.com.gunicorn
+exit
+
+root
+cd quick_bill
+git pull
+systemctl daemon-reload
+systemctl restart quick_bill.com.gunicorn
+exit
+
+
+
+_______________________________________
+
+
+git clone https://github.com/9730991252/quick_bill.git
+cd quick_bill
+
+_______________________________________
+********** Create Virtual env *****
+
+virtualenv venv
+
+********** Activate Virtual env ****
+
+source venv/bin/activate
+
+
+***** install django ******
+
+pip install django
+pip install gunicorn
+
+****************migrations******
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+*********** Deactivate Virtualenv *****
+
+deactivate
+
+************ Create System Socket File for Gunicorn *******
+
+Example:- sudo nano /etc/systemd/system/crenta.in.gunicorn.socket
+
+cd  /etc/systemd/system/
+
+sudo nano quick_bill.com.gunicorn.socket
+
+
+
+[Unit]
+Description=quick_bill.com.gunicorn socket
+
+[Socket]
+ListenStream=/run/quick_bill.com.gunicorn.sock
+
+[Install]
+WantedBy=sockets.target
+
+
+************** Create System Service File for Gunicorn ******
+Syntax:- sudo nano /etc/systemd/system/your_domain.gunicorn.service
+Example:- sudo nano /etc/systemd/system/narayaniorder.com.gunicorn.service
+
+cd  /etc/systemd/system/
+
+sudo nano quick_bill.com.gunicorn.service
+
+
+[Unit]
+Description=quick_bill.com.gunicorn daemon
+Requires=quick_bill.com.gunicorn.socket
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/root/quick_bill
+ExecStart=/root/quick_bill/venv/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/quick_bill.com.gunicorn.sock \
+          quick_bill.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+----------------------------------------------------------------
+sudo systemctl start quick_bill.com.gunicorn.socket
+
+sudo systemctl start quick_bill.com.gunicorn.service
+
+
+-----------------------------------------------------------------
+
+sudo systemctl enable quick_bill.com.gunicorn.socket
+
+sudo systemctl enable quick_bill.com.gunicorn.service
+
+
+-----------------------------------------------------------------------
+
+sudo systemctl status quick_bill.com.gunicorn.socket
+
+sudo systemctl status quick_bill.com.gunicorn.service
+
+-------------------------------------------
+
+sudo systemctl daemon-reload
+sudo systemctl restart quick_bill.com.gunicorn
+
+
+
+--------------------------------
+
+
+
+****************** Create Virtual Host File ******
+Syntax:- sudo nano /etc/nginx/sites-available/your_domain
+Example:- sudo nano /etc/nginx/sites-available/crenta.in
+
+
+cd /etc/nginx/sites-available
+
+sudo nano quick_bill.com
+
+
+
+server{
+    listen 80;
+    listen [::]:80;
+
+    server_name 103.150.136.82 q.tejorder.com www.q.tejorder.com;
+    client_max_body_size 500M;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+
+    location / {
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_pass http://unix:/run/quick_bill.com.gunicorn.sock;
+    }    
+}
+
+-----------------------------------------------------
+
+
+########## Enable Virtual Host or Create Symbolic Link of Virtual Host File ########
+
+sudo ln -s /etc/nginx/sites-available/quick_bill.com /etc/nginx/sites-enabled/quick_bill.com
+
+
+%%%%%%%%%%%%%%%%%%%%% Check Configuration is Correct or Not %%%%%
+
+sudo nginx -t
+
+%%%%%%%%%%%% Restart Nginx %%%%%%%%%
+
+sudo service nginx restart
+
+
+********** restart ******
+
+sudo systemctl daemon-reload
+sudo systemctl restart quick_bill.com.gunicorn
+
+
+--------------------------------------- ssl ------------------
+
+sudo certbot --nginx
+
+sudo certbot --nginx -d janmanasnews.com -d www.janmanasnews.com

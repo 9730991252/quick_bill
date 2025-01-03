@@ -1,0 +1,55 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% load home_tag %}
+<div>welcome - {{e.name}} &nbsp; <b>Todayes Total  Rs.{% todayes_tea_total %}
+</b></div>
+
+{% include 'include/office/office_menu.html' %}
+<div class="container">
+<div class="card-container">
+    {% for bill in bill %}
+    <a href="/office/completed_view_bill/{{bill.order_filter}}">
+        <div class="card">
+            <h6>Bill Number: {{ bill.order_filter }}</h6>
+            <p>Total Amount: {{ bill.total_price }}</p>
+            <p>Date: {{ bill.ordered_date }}</p>
+            <button class="btn btn-success">View</button>
+        </div>
+    </a>
+    {% endfor %}
+</div>
+</div>
+<style>
+    a{
+        text-decoration: none;
+    }
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    text-align: center;
+    justify-content: center;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+.card p {
+    margin: 8px 0;
+}
+</style>
+
+
+
+{% endblock content %}

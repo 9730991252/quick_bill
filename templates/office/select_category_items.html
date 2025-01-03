@@ -1,0 +1,59 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% include 'include/alert.html' %}
+<div>
+    welcome - {{e.name}}
+</div>
+
+{% include 'include/office/office_menu.html' %}
+<div class="text-center" style="position: sticky;top: 0px;width: 100%;">
+    <h5><b>{{category.name}}</b></h5>
+</div>
+
+
+<style>
+    .item_main_box{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 10px;
+        padding: 10px;
+        justify-content: center;
+    }
+    .item_box{
+        padding: 10px;
+        border: 1px solid rgb(126, 126, 126);
+        border-radius: 5px;
+    }
+</style>
+<div class="item_main_box">
+{% for i in item %}
+<div id="item_box{{i.id}}" onclick="select_category_item('{{i.id}}')" class="item_box text-center" {% if i.selected_status == 1 %} style="background-color: rgb(191, 255, 200);"{% endif %} >{{i.name}}</div>
+{% endfor %}
+</div>
+
+<br><br>
+
+<script>
+    function select_category_item(item_id){
+        $.ajax({
+                url: "{% url 'select_category_item' %}",
+                method: "GET",
+                data:{
+                    shope_id:'{{e.shope.id}}',
+                    item_id:item_id,
+                    category_id:'{{category.id}}'
+                },
+            success: function(res){
+                if (res.status == 1){
+                    document.getElementById('item_box'+item_id).style.backgroundColor = 'rgb(191, 255, 200)';
+                }
+                else{
+                    document.getElementById('item_box'+item_id).style.backgroundColor = 'rgb(255, 255, 255)';
+                }
+            }
+        })
+    }
+</script>
+{% endblock content %}

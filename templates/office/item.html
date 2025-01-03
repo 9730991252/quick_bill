@@ -1,0 +1,112 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% include 'include/alert.html' %}
+<div>
+    welcome - {{e.name}}
+</div>
+
+{% include 'include/office/office_menu.html' %}
+
+
+<div class="container">
+    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add  Item
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Add Item</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">{% csrf_token %}
+            <div class="mb-3">
+                <label for="">Name</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="">price</label>
+                <input type="text" name="price" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary" name="add_item">Add</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+
+        <th scope="col">Price</th>
+        <th scope="col">Action</th>
+        <th scope="col">Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for i in item %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{i.name}}</td>
+                <td>{{i.price}}</td>
+                <td><form method="POST">{% csrf_token %} <input type="hidden" name="id" value="{{i.id}}"> {% if i.status == 1 %}<button class="btn btn-success" type="submit" name="active">Active</button>{% else %}<button class="btn btn-danger" type="submit" name="deactive">Deactive</button>{% endif %}</form></td>
+                <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{i.id}}">Edit</button></td>
+            </tr>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Item</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST">{% csrf_token %}
+            <input type="hidden" name="id" value="{{i.id}}">
+            <div class="mb-3">
+                <label for="">Name</label>
+                <input type="text" name="name" value="{{i.name}}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="">price</label>
+                <input type="text" name="price" value="{{i.price}}" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary" name="edit_item">Add</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+        {% endfor %}
+    </tbody>
+  </table>
+
+
+
+</div>
+
+
+{% endblock content %}
