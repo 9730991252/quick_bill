@@ -15,8 +15,8 @@ def cart_item_detail(item_id, employee_id):
         return {'qty':0, 'amount':0}
     
 @register.simple_tag()
-def todayes_tea_total():
-    t =  OrderMaster.objects.filter(ordered_date__icontains=date.today()).aggregate(Sum('total_price'))
+def todayes_total_amount(shope_id):
+    t =  OrderMaster.objects.filter(shope_id=shope_id,ordered_date__icontains=date.today()).aggregate(Sum('total_price'))
     t =  t['total_price__sum']
     if t:
         return t

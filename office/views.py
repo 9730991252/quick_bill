@@ -53,7 +53,7 @@ def office_home(request):
             'cart':Cart.objects.filter(shope_id=e.shope_id,office_employee_id=e.id),
             'item':Item.objects.filter(shope_id=e.shope_id,status=1),
             'amount':amount,
-            'category':Category.objects.filter(shope_id=e.shope_id,status=1),
+            'category':Category.objects.filter(shope_id=e.shope_id,status=1).order_by('-order_by'),
         }
         return render(request, 'office/office_home.html', context)
     else:
@@ -138,10 +138,18 @@ def category(request):
             i = Category.objects.filter(id=id).first()
             i.status = 1
             i.save()
-            return redirect('category')   
+            return redirect('category')
+        if 'save_order_by'in request.POST:
+            c_id = request.POST.get('id')
+            order_by = request.POST.get('order_by')
+            c = Category.objects.filter(id=c_id).first()
+            c.order_by = order_by
+            c.save()
+            return redirect('category')
+               
         context={
             'e':e,
-            'category':Category.objects.filter(shope_id=e.shope_id),
+            'category':Category.objects.filter(shope_id=e.shope_id).order_by('-order_by'),
         }
         return render(request, 'office/category.html', context)
     else:

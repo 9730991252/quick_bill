@@ -3,7 +3,7 @@
 {% endblock head %}
 {% block content %}
 {% load home_tag %}
-<div>welcome - {{e.name}} &nbsp; <b>Todayes Total  Rs.{% todayes_tea_total %}
+<div>welcome - {{e.name}} &nbsp; <b>Todayes  {% todayes_total_amount e.shope_id %}
 </b></div>
 
 {% include 'include/office/office_menu.html' %}

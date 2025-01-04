@@ -11,6 +11,7 @@
 
 
 <div class="container">
+
     <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Add  Category
@@ -41,28 +42,59 @@
       </div>
     </div>
   </div>
+  <br>
+  <br>
+  <br>
 
+  <style>
+    a{
+        text-decoration: none;
+    }
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    text-align: center;
+    justify-content: center;
+}
 
+.card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Select Item</th>
-        <th scope="col">Action</th>
-        <th scope="col">Edit</th>
-      </tr>
-    </thead>
-    <tbody>
+.card h2 {
+    margin-top: 0;
+}
+
+.card p {
+    margin: 8px 0;
+}
+</style>
+
+    <div class="card-container">
         {% for c in category %}
-            <tr>
-                <th scope="row">{{forloop.counter}}</th>
-                <td>{{c.name}}</td>
-                <td><a href="/office/select_category_items/{{c.id}}" class="btn btn-danger">Select Item</a></td>
-                <td><form method="POST">{% csrf_token %} <input type="hidden" name="id" value="{{c.id}}"> {% if c.status == 1 %}<button class="btn btn-success" type="submit" name="active">Active</button>{% else %}<button class="btn btn-danger" type="submit" name="deactive">Deactive</button>{% endif %}</form></td>
-                <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal{{c.id}}">Edit</button></td>
-            </tr>
+            <div class="card">
+                <h6>{{c.name }}</h6>
+                <div style="display: flex; justify-content: space-evenly;">
+                  <div><a href="/office/select_category_items/{{c.id}}" class="btn btn-danger btn-sm">Select Item</a></div>
+                  <div><form method="POST">{% csrf_token %} <input type="hidden" name="id" value="{{c.id}}"> {% if c.status == 1 %}<button class="btn btn-success btn-sm" type="submit" name="active">Active</button>{% else %}<button class="btn btn-danger btn-sm" type="submit" name="deactive">Deactive</button>{% endif %}</form></div>
+                  <div><button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal{{c.id}}">Edit</button></div>
+                </div>
+                  <div>
+                    <form method="POST">
+                      {% csrf_token %}
+                      <input type="hidden" name="id" value="{{c.id}}">
+                      <input style="width: 100px;margin-top: 10px;" name="order_by" type="number" value="{{c.order_by}}">
+                      <button  type="submit" class="btn text-success btn-sm" name="save_order_by" ><i class="fa fa-check" aria-hidden="true"></i></button>
+                    </form>
+                  </div>
+                </div>
+            
+
 
   <!-- Modal -->
   <div class="modal fade" id="exampleModal{{c.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -93,12 +125,16 @@
   </div>
 
         {% endfor %}
-    </tbody>
-  </table>
+    </div>
+
+
+  </div>
+
+
+    
 
 
 
-</div>
 
 
 {% endblock content %}

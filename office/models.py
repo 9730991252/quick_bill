@@ -38,6 +38,7 @@ class OrderDetail(models.Model):
 class Category(models.Model):
     shope = models.ForeignKey(Shope,on_delete=models.PROTECT,null=True)
     name = models.CharField(max_length=100)
+    order_by = models.IntegerField(default=1)
     status = models.IntegerField(default=1)
     
 class Select_category_item(models.Model):
