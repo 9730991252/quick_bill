@@ -67,6 +67,11 @@ def edit_bill(request, id):
             order_master = OrderMaster.objects.filter(shope_id=e.shope_id, id=id).first()
             order_details = OrderDetail.objects.filter(shope_id=e.shope_id, order_filter=order_master.order_filter)
             if 'update_order' in request.POST:
+                amount = OrderDetail.objects.filter(shope_id=e.shope_id, order_filter=order_master.order_filter).aggregate(Sum('total_price'))
+                amount = amount['total_price__sum']
+                o = OrderMaster.objects.filter(id=id).first()
+                o.total_price = amount
+                o.save()
                 return redirect(f'/office/completed_view_bill/{order_master.order_filter}')
             
             amount = OrderDetail.objects.filter(shope_id=e.shope_id, order_filter=order_master.order_filter).aggregate(Sum('total_price'))
@@ -120,8 +125,9 @@ def completed_bill(request):
             for b in OrderMaster.objects.filter(shope_id=e.shope_id).order_by('-id'):
                 cancel_btn_show_status = 0
                 order_details = OrderDetail.objects.filter(order_filter=b.order_filter,shope_id=e.shope_id).first()
-                if order_details.date == date.today():
-                    cancel_btn_show_status = 1
+                if order_details:
+                    if order_details.date == date.today():
+                        cancel_btn_show_status = 1
                 bill.append({
                     'id': b.id,
                     'order_filter': b.order_filter,
