@@ -9,4 +9,5 @@ urlpatterns = [
     path('report/', views.report, name='report'),
     path('category/', views.category, name='category'),
     path('select_category_items/<int:category_id>', views.select_category_items, name='select_category_items'),
+    path('edit_bill/<int:id>', views.edit_bill, name='edit_bill'),
 ]

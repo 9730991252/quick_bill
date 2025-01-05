@@ -6,11 +6,20 @@ import math
 from datetime import date
 from office.models import *
 register = template.Library()
+
 @register.simple_tag()
 def cart_item_detail(item_id, employee_id):
     cart = Cart.objects.filter(item_id=item_id,office_employee_id=employee_id).first()
     if cart:
         return {'qty':cart.qty, 'amount':cart.total_amount}
+    else:
+        return {'qty':0, 'amount':0}
+    
+@register.simple_tag()
+def edit_cart_item_detail(item_id, order_filter):
+    o = OrderDetail.objects.filter(item_id=item_id,order_filter=order_filter).first()
+    if o:
+        return {'qty':o.qty, 'amount':o.total_price}
     else:
         return {'qty':0, 'amount':0}
     

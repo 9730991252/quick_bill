@@ -1,0 +1,375 @@
+{% extends 'home/base.html' %}
+{% block head %}
+{% endblock head %}
+{% block content %}
+{% include 'include/alert.html' %}
+
+{% load home_tag %}
+
+<div>
+    welcome - {{e.name}}
+</div>
+
+{% include 'include/office/office_menu.html' %}
+<!--?------------------------------------------------------------------------------>
+
+
+
+
+
+<style>
+    #tmc{
+      font-weight: 700;
+      color: black;
+      font-size: 22px;
+      background-color: rgba(166, 255, 187, 0.2);
+    }
+  </style>
+  <div class="container border">
+    <div id="cart">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Item Name</th>
+        <th scope="col">Qty</th>
+        <th scope="col">Price</th>
+        <th scope="col">Total Price</th>
+      </tr>
+    </thead>
+    <tbody  id="cart_item">
+        {% for t in order_details %}
+        <tr id="cart">
+            <td>{{t.item.name}}</td>
+            <td>{{t.qty}}</td>
+            <td>{{t.price}}</td>
+            <td>{{t.total_price}}</td>
+            <td>
+                <form method="POST">{% csrf_token %}
+                    <input type="hidden" name="order_detail_id" value="{{t.id}}">
+                    <button type="submit" class="btn btn-transparent text-danger btn-sm" name="Delete">X</button>
+                </form>
+            </td>
+          </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  </div>
+  
+  
+
+
+
+<!---------------------------------------------------------->
+<div class="body_main_box">
+  <style>
+    .body_main_box{
+      display: grid;
+      grid-template-columns: 1fr 3fr;
+      gap: 10px;
+      width: 100%;
+      margin: auto;
+      padding-right: 10px;
+    }
+    .category_btn{
+      width: 100%;
+    }
+    .dish_main_box{
+        padding: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, 220px);
+        gap: 10px;
+        width: 80%;
+        margin: auto;
+        justify-content: center;
+    }
+    .dish_box{
+        border: 1px solid black;
+        padding: 10px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .name{
+        font-weight: 700px;
+    }
+    @media only screen and (min-width: 700px) {
+      .dish_main_box{
+        gap: 20px;
+      }
+      .body_main_box{
+          grid-template-columns: 0.5fr 6fr;
+    }
+    }
+  </style>
+
+  <div class="category_box">
+      {% for c in category %}
+        <div class="btn btn-sm btn-primary m-1 category_btn" id="category_btn{{c.id}}"  onclick="search_item_by_category('{{c.id}}')">{{c.name}}</div>
+      {% endfor %}
+  </div>
+  <div class="containt_box">
+
+
+
+<br>
+<div class="dish_main_box" id="item_ruselt">
+{% for i in item %}
+
+<input type="hidden" name="id" value="{{i.id}}">
+<input type="hidden" name="price" value="{{i.price}}">
+<div class="dish_box">
+    <div class="name" onclick="add_to_edit_cart('{{i.id}}','{{i.price}}')"><b>{{i.name}}</b></div>
+    {% edit_cart_item_detail i.id order_master.order_filter as n %}
+    <div id="item_detail{{i.id}}"  {% if n.qty == 0 %} style="display: none;"{% endif %}>
+      <div class=" my-4 text-center" style="display: grid;grid-template-columns: 1fr 2fr 1fr;">
+        <div class=" "><button type="button" onclick="minus('{{i.id}}','{{i.price}}')" class="btn btn-success px-3">-</button></div>
+        <div class="">
+            <input type="text" name="qty" style="width: 60px; text-align: center;" id="qty{{i.id}}" value="{% if n.qty != 0 %}{{n.qty}}{% else %}1{% endif %}" oninput="oninput_add_to_cart('{{i.id}}','{{i.price}}')" >
+        </div>
+        <div class=""><button type="button" onclick="plus('{{i.id}}','{{i.price}}')" class="btn btn-success px-3">+</button></div>
+      </div>
+      <div class="mt-2"  >Rs.<input style="border: none; width: 100px;" type="text" name="total_amount"  id="price{{i.id}}" value="{% if n.qty != 0 %} {{n.amount}} {% else %} {{i.price}} {% endif %}" readonly></div>
+    </div>
+</div>
+
+{% endfor %}
+</div>
+
+
+</div>
+
+</div>
+
+
+<br>
+<br><br><br><br><br>
+
+<style>
+  .footer{
+    background-color: antiquewhite;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    .input{
+      width: 100%;
+    }
+  }
+</style>
+
+
+<div class="footer">
+  <div class="input">
+    <div><input type="text" oninput="search_tea_item()" class="form-control" placeholder="Search Item" id="words"></div>
+    <div> Total Rs. <b id="amount">{{amount}}</b></div>
+  </div>
+  <form method="POST"> {% csrf_token %}
+    <div class="container"><button type="submit"  name="complete_order" class="btn btn-danger btn-sm " >Complete Order</button></div>
+  </form>
+</div>
+
+
+<script>
+
+function search_tea_item(){
+  $.ajax({
+    url: "{% url 'search_item_edit' %}",
+    method: "GET",
+    data:{
+      words:document.getElementById('words').value,
+      order_filter:'{{order_master.order_filter}}'
+    },
+    success: function(res){
+      document.getElementById('item_ruselt').innerHTML = res.t
+    }
+  })
+}
+
+last_id = 0
+
+function search_item_by_category(id){
+  $.ajax({
+    url: "{% url 'search_item_by_category_edit' %}",
+    method: "GET",
+    data:{
+      c_id:id,
+      order_filter:'{{order_master.order_filter}}'
+    },
+    success: function(res){
+      document.getElementById('item_ruselt').innerHTML = res.t
+      document.getElementById('category_btn'+id).className = 'btn btn-sm btn-warning m-1 category_btn'
+      if(last_id != 0){
+        document.getElementById('category_btn'+last_id).className = 'btn btn-sm btn-primary m-1 category_btn'
+      }
+      last_id = id
+    }
+  })
+}
+
+
+//plus code
+
+function add_to_edit_cart(id,price){
+  var qty = document.getElementById('qty'+id).value;
+  p=qty*price
+  
+  
+  if (qty != ''){
+    $.ajax({
+    url: "{% url 'add_to_edit_cart' %}",
+    method: "GET",
+    data:{
+      employee_id:'{{e.id}}',
+      item_id:id,
+      price:price,
+      qty:qty,
+      total_amount:p,
+      order_filter:'{{order_master.order_filter}}'
+    },
+    success: function(res){
+      document.getElementById('amount').innerText = res.amount
+      document.getElementById('item_detail'+id).style.display = 'unset'
+      document.getElementById('cart_item').innerHTML = res.t
+      document.getElementById('qty'+id).value = 1
+      document.getElementById('price'+id).value= price
+      document.getElementById('qty'+id).value=qty;
+      document.getElementById('price'+id).value=p;
+      
+    }
+  })
+}
+else{
+  $.ajax({
+    url: "{% url 'cut_to_edit_cart' %}",
+    method: "GET",
+    data:{
+      employee_id:'{{e.id}}',
+      item_id:id,
+      price:price,
+      qty:0,
+      total_amount:0,
+       order_filter:'{{order_master.order_filter}}'
+    },
+    success: function(res){
+      document.getElementById('amount').innerText = res.amount
+      document.getElementById('cart_item').innerHTML = res.t
+      document.getElementById('item_detail'+id).style.display = 'none'
+
+    }
+  })
+}
+}
+
+
+function add_to_cart(id,price){
+  $.ajax({
+    url: "{% url 'add_to_edit_cart' %}",
+    method: "GET",
+    data:{
+      employee_id:'{{e.id}}',
+      item_id:id,
+      price:price,
+      qty:1,
+      total_amount:price,
+       order_filter:'{{order_master.order_filter}}'
+    },
+    success: function(res){
+      document.getElementById('amount').innerText = res.amount
+      document.getElementById('item_detail'+id).style.display = 'unset'
+      document.getElementById('cart_item').innerHTML = res.t
+      document.getElementById('qty'+id).value = 1
+      document.getElementById('price'+id).value= price
+
+    }
+  })
+}
+function plus(id,price){
+  var qty = document.getElementById('qty'+id).value
+  if(qty < 50){
+    qty++;
+  document.getElementById('qty'+id).value=qty;
+  p=qty*price
+  document.getElementById('price'+id).value=p;
+    //speak code
+    
+  const msg = new SpeechSynthesisUtterance;
+  msg.text=qty;
+  
+  msg.voice=speechSynthesis.getVoices()[1];
+  speechSynthesis.speak(msg);
+
+
+//ajax
+ 
+$.ajax({
+    url: "{% url 'add_to_edit_cart' %}",
+    method: "GET",
+    data:{
+      employee_id:'{{e.id}}',
+      item_id:id,
+      price:price,
+      qty:qty,
+      total_amount:p,
+       order_filter:'{{order_master.order_filter}}'
+    },
+    success: function(res){
+      document.getElementById('amount').innerText = res.amount
+      document.getElementById('cart_item').innerHTML = res.t
+    }
+  })
+
+  }
+}
+    
+  // minus btn code
+
+    function minus(id,price){
+  var qty = document.getElementById('qty'+id).value
+  if(qty > 0){
+  qty--;
+  document.getElementById('qty'+id).value=qty;
+  p=qty*price
+  document.getElementById('price'+id).value=p;
+
+        //speak code
+    
+        const msg = new SpeechSynthesisUtterance;
+  msg.text=qty;
+  
+  msg.voice=speechSynthesis.getVoices()[1];
+  speechSynthesis.speak(msg);
+  }
+  if(qty == 0){
+    document.getElementById('item_detail'+id).style.display = 'none'
+
+  }
+  $.ajax({
+    url: "{% url 'cut_to_edit_cart' %}",
+    method: "GET",
+    data:{
+      employee_id:'{{e.id}}',
+      item_id:id,
+      price:price,
+      qty:qty,
+      total_amount:p,
+       order_filter:'{{order_master.order_filter}}'
+    },
+    success: function(res){
+      document.getElementById('amount').innerText = res.amount
+      document.getElementById('cart_item').innerHTML = res.t
+    }
+  })
+
+
+
+    }
+    
+
+</script>
+
+
+<!--//------------------------------------------------------------------------------>
+{% endblock content %}

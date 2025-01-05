@@ -22,6 +22,7 @@ class OrderMaster(models.Model):
     total_price=models.FloatField(default=0,null=True)
     ordered_date = models.DateTimeField(auto_now_add=True,null=True)
     order_filter=models.IntegerField(default=True)
+    status = models.IntegerField(default=1)
     
     
 class OrderDetail(models.Model):
@@ -34,6 +35,7 @@ class OrderDetail(models.Model):
     ordered_date = models.DateTimeField(auto_now_add=True,null=True)
     date=models.DateField(auto_now_add=True,null=True)
     order_filter=models.IntegerField(default=True)
+    status = models.IntegerField(default=1)
 
 class Category(models.Model):
     shope = models.ForeignKey(Shope,on_delete=models.PROTECT,null=True)

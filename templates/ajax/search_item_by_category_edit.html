@@ -1,0 +1,21 @@
+{% load home_tag %}
+{% for i in item %}
+
+<input type="hidden" name="id" value="{{i.id}}">
+<input type="hidden" name="price" value="{{i.price}}">
+<div class="dish_box">
+    <div class="name" onclick="add_to_edit_cart('{{i.id}}','{{i.price}}')"><b>{{i.name}}</b></div>
+    {% edit_cart_item_detail i.id order_master.order_filter as n %}
+    <div id="item_detail{{i.id}}"  {% if n.qty == 0 %} style="display: none;"{% endif %}>
+      <div class=" my-4 text-center" style="display: grid;grid-template-columns: 1fr 2fr 1fr;">
+        <div class=" "><button type="button" onclick="minus('{{i.id}}','{{i.price}}')" class="btn btn-success px-3">-</button></div>
+        <div class="">
+            <input type="text" name="qty" style="width: 60px; text-align: center;" id="qty{{i.id}}" value="{% if n.qty != 0 %}{{n.qty}}{% else %}1{% endif %}" oninput="oninput_add_to_cart('{{i.id}}','{{i.price}}')" >
+        </div>
+        <div class=""><button type="button" onclick="plus('{{i.id}}','{{i.price}}')" class="btn btn-success px-3">+</button></div>
+      </div>
+      <div class="mt-2"  >Rs.<input style="border: none; width: 100px;" type="text" name="total_amount"  id="price{{i.id}}" value="{% if n.qty != 0 %} {{n.amount}} {% else %} {{i.price}} {% endif %}" readonly></div>
+    </div>
+</div>
+
+{% endfor %}

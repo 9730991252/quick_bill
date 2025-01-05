@@ -10,14 +10,51 @@
 <div class="container">
 <div class="card-container">
     {% for bill in bill %}
-    <a href="/office/completed_view_bill/{{bill.order_filter}}">
-        <div class="card">
-            <h6>Bill Number: {{ bill.order_filter }}</h6>
-            <p>Total Amount: {{ bill.total_price }}</p>
-            <p>Date: {{ bill.ordered_date }}</p>
-            <button class="btn btn-success">View</button>
-        </div>
-    </a>
+    <div class="card">
+        <h6>Bill Number: {{ bill.order_filter }}</h6>
+        <p>Total Amount: {{ bill.total_price }}</p>
+        <p>Date: {{ bill.ordered_date }}</p>
+        {% if bill.status == 1 %}
+            {% if bill.cancel_btn_show_status == 1 %}
+                <div style="display: grid;grid-template-columns: 3fr 0.5fr 0.5fr; gap: 10px;">
+                    <a href="/office/completed_view_bill/{{bill.order_filter}}" class="btn btn-success ">View</a>
+                    <a href="/office/edit_bill/{{bill.id}}" class="btn btn-primary">Edit</a>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal{{bill.id}}">
+                        Cancel
+                    </button>
+                </div> 
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal{{bill.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Cancel Conformetion</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                    
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="order_filter" value="{{bill.order_filter}}">
+                                    <input type="password" id="pin{{bill.id}}" oninput="check_pin('{{bill.id}}')">
+                                    <button name="cancel_bill" class="btn btn-danger " id="cancel_btn{{bill.id}}" style="width: fit-content;" disabled>Cancel</button>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+            {% else %}
+                <a href="/office/completed_view_bill/{{bill.order_filter}}" class="btn btn-success ">View</a>
+            {% endif %}
+        {% else %}
+            <div class="text-danger ">This Order Is Canceld</div>
+            <a href="/office/completed_view_bill/{{bill.order_filter}}" class="btn btn-success ">View</a>
+        {% endif %}
+    </div>
     {% endfor %}
 </div>
 </div>
@@ -50,6 +87,17 @@
 }
 </style>
 
+<script>
+    function check_pin(bill_id) {
+        var pinInput = document.getElementById('pin' + bill_id).value;
+        var cancelButton = document.getElementById('cancel_btn' + bill_id);
+        if (Number(pinInput) == Number('{{e.pin}}')) {
+            cancelButton.disabled = false;
+        } else {
+            cancelButton.disabled = true;
+        }
+    }
+</script>
 
 
 {% endblock content %}
