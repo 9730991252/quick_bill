@@ -1,45 +1,237 @@
 {% extends 'home/base.html' %}
+
 {% block head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/styles.css">
 {% endblock head %}
+
 {% block content %}
-{% include 'include/navbar.html' %}
-{% include 'include/alert.html' %}
-
-<div class="text-center mt-3">
-    <h5>'<b>क्विक बिलिंग</b>' मध्ये आपले सहर्ष स्वागत  आहे. <br></h5>
-</div>
-
-<br><br>
-<div class="container text-center">
-    <a href="/login/" class="btn btn-primary">Login</a>
-</div>
-
-<!-- <iframe src="https://neptub.com/3d-virtual-tour/" style="width: 500px;height: 500px;" ></iframe> -->
-
-
-
-
-
-<style>
-    .footer{
-        margin-top: auto;
-        margin-bottom: 0px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        h6{
-            font-weight: 700;
+    {% include 'include/navbar.html' %}
+    {% include 'include/alert.html' %}
+    
+    <style>
+        /* Reset basic styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-    }
-</style>
-<div class="container my-5 footer">
-    <h6>अधिक माहितीसाठी संपर्क </h6>
-    <h6>सुनील काळे , करमाळा </h6>
-    <h6>मोबाईल - 9730991252 </h6>
-    <h6>ईमेल  - sunilkale101@gmail.com</h6>
-</div>
+
+        /* Body and Background */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+        }
+
+        /* Header styles */
+        nav{
+            background-color: rgba(0, 0, 0, 0.7);
+        }
 
 
+        /* Hero Section with Image */
+        .hero {
+            background: url('https://wallpapers.com/images/featured/food-4k-1pf6px6ryqfjtnyr.jpg') no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #ffffff;
+        }
 
+        .hero-content {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            border-radius: 8px;
+        }
+
+        .hero h1 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+
+        .hero button {
+            padding: 12px 30px;
+            font-size: 18px;
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .hero button:hover {
+            background-color: #218838;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 50px 20px;
+            background-color: #ffffff;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 40px;
+        }
+
+        .feature-box {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            background-color: #f1f1f1;
+            padding: 20px;
+            border-radius: 8px;
+            flex-basis: 30%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .feature h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .feature p {
+            font-size: 18px;
+        }
+
+        /* Footer Section */
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            /* Navbar: show hamburger button */
+            header .navbar-toggler {
+                display: block;
+            }
+
+            header nav ul {
+                display: none;
+                width: 100%;
+                text-align: center;
+                padding-top: 10px;
+            }
+
+            header nav ul li {
+                margin: 15px 0;
+            }
+
+            header nav ul li a {
+                font-size: 20px;
+            }
+
+            /* Hero Section */
+            .hero h1 {
+                font-size: 30px;
+                margin-bottom: 15px;
+            }
+
+            .hero p {
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+
+            .hero button {
+                padding: 10px 20px;
+                font-size: 16px;
+            }
+
+            /* Features Section */
+            .features h2 {
+                font-size: 28px;
+                margin-bottom: 30px;
+            }
+
+            .feature-box {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .feature {
+                flex-basis: 100%;
+            }
+        }
+
+        /* Extra small screen */
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 24px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .hero button {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .features h2 {
+                font-size: 22px;
+            }
+        }
+
+    </style>
+
+
+    <!-- Hero Section with Image -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Welcome to Quick Bill</h1>
+            <p>"Your trusted solution for billing management."</p>
+            <a href="/login/" class="btn btn-primary">Login</a>        
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Our Features</h2>
+            <div class="feature-box">
+                <div class="feature">
+                    <h3>Fast Billing</h3>
+                    <p>Experience quick and efficient bill processing.</p>
+                </div>
+                <div class="feature">
+                    <h3>Customer Support</h3>
+                    <p>Our support team is here to assist you anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Quick Bill. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle mobile navigation
+        document.getElementById('navbar-toggler').addEventListener('click', function() {
+            const nav = document.getElementById('navbar');
+            nav.querySelector('ul').style.display = (nav.querySelector('ul').style.display === 'block') ? 'none' : 'block';
+        });
+    </script>
 {% endblock content %}
