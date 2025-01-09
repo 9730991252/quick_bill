@@ -233,25 +233,25 @@ function oninput_add_to_cart(id,price){
     }
   })
 }
-else{
-  $.ajax({
-    url: "{% url 'cut_item_to_cart' %}",
-    method: "GET",
-    data:{
-      employee_id:'{{e.id}}',
-      item_id:id,
-      price:price,
-      qty:0,
-      total_amount:0
-    },
-    success: function(res){
-      document.getElementById('amount').innerText = res.amount
-      document.getElementById('cart_item').innerHTML = res.t
-      document.getElementById('item_detail'+id).style.display = 'none'
+// else{
+//   $.ajax({
+//     url: "{% url 'cut_item_to_cart' %}",
+//     method: "GET",
+//     data:{
+//       employee_id:'{{e.id}}',
+//       item_id:id,
+//       price:price,
+//       qty:0,
+//       total_amount:0
+//     },
+//     success: function(res){
+//       document.getElementById('amount').innerText = res.amount
+//       document.getElementById('cart_item').innerHTML = res.t
+//       document.getElementById('item_detail'+id).style.display = 'none'
 
-    }
-  })
-}
+//     }
+//   })
+// }
 }
 
 
