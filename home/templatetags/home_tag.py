@@ -25,7 +25,7 @@ def edit_cart_item_detail(item_id, order_filter):
     
 @register.simple_tag()
 def todayes_total_amount(shope_id):
-    t =  OrderMaster.objects.filter(shope_id=shope_id,ordered_date__icontains=date.today()).aggregate(Sum('total_price'))
+    t =  OrderMaster.objects.filter(shope_id=shope_id,ordered_date__icontains=date.today(), status=1).aggregate(Sum('total_price'))
     t =  t['total_price__sum']
     if t:
         return t

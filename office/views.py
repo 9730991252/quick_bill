@@ -159,13 +159,12 @@ def completed_view_bill(request,order_filter):
         mobile = request.session['office_mobile']
         e = office_employee.objects.filter(mobile=mobile).first()
         if e:
-            o = OrderDetail.objects.filter(order_filter=order_filter).aggregate(Sum('total_price'))
+            pass
         context={
             'e':e,
             'order_master':OrderMaster.objects.filter(shope_id=e.shope_id,order_filter=order_filter).first(),
             'order_detail':OrderDetail.objects.filter(shope_id=e.shope_id,order_filter=order_filter),
             'shope':Shope.objects.filter(id=e.shope_id).first(),
-            'total_amount':o['total_price__sum'],
         }
         return render(request, 'office/completed_view_bill.html', context)
     else:
