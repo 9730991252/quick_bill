@@ -161,9 +161,11 @@
     <div><input type="text" oninput="search_tea_item()" class="form-control" placeholder="Search Item" id="words"></div>
     <div> Total Rs. <b id="amount">{{amount}}</b></div>
   </div>
+  {% if e.status == 1 %}
   <form method="POST"> {% csrf_token %}
-    <div class="container"><button type="submit"  name="complete_order" class="btn btn-danger btn-sm " >Complete Order</button></div>
+    <div class="container"><button  type="submit"  name="complete_order" class="btn btn-danger btn-sm " >Complete Order</button></div>
   </form>
+  {% endif %}
 </div>
 
 
