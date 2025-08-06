@@ -119,7 +119,7 @@ def select_category_items(request,category_id):
 def completed_bill(request):
     if request.session.has_key('office_mobile'):
         mobile = request.session['office_mobile']
-        e = office_employee.objects.filter(mobile=mobile, status=1).first()
+        e = office_employee.objects.filter(mobile=mobile).first()
         if e:
             bill = []
             for b in OrderMaster.objects.filter(shope_id=e.shope_id).order_by('-id'):
@@ -297,7 +297,7 @@ def profile(request):
 def report(request):
     if request.session.has_key('office_mobile'):
         mobile = request.session['office_mobile']
-        e = office_employee.objects.filter(mobile=mobile, status=1).first()
+        e = office_employee.objects.filter(mobile=mobile).first()
         item = []
         from_date = ''
         to_date = ''
